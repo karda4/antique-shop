@@ -1,0 +1,12 @@
+html, body {
+	width: 100%;
+	margin: 0;
+}
+table {
+	margin: 0 auto;
+	border: 0;
+	border-spacing: 0px;
+}
+td { 
+	padding: 0px;
+}
