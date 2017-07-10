@@ -1,4 +1,4 @@
-package ua.kardach.antiqueshop.entity;
+package ua.kardach.antiqueshop.model;
 
 public class EstimatedProduct {
 	

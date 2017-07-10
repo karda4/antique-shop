@@ -1,13 +1,19 @@
-package ua.kardach.antiqueshop.entity;
+package ua.kardach.antiqueshop.model;
 
 public class User {
 
+	private long id;
 	private String name;
 	private String password;
+	private boolean registered;
 	private boolean admin;
-	
-	public User(){
-		
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -26,6 +32,14 @@ public class User {
 		this.password = password;
 	}
 
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
+	}
+
 	public boolean isAdmin() {
 		return admin;
 	}
@@ -33,4 +47,5 @@ public class User {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
+
 }
