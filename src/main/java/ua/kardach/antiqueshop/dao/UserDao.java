@@ -4,12 +4,15 @@ import ua.kardach.antiqueshop.model.User;
 
 public interface UserDao {
 
-	//create
-	User addUser(User user);
-	//read
-	User getUserByName(String name);
-	//update
-	boolean updateUser(User user);
-	//delete
-	boolean deleteUser(User user);
+	// create
+	public boolean addUser(User user);
+
+	// read
+	public User getUserByName(String name);
+
+	// update
+	public boolean updateUser(User user);
+
+	// delete
+	public boolean deleteUser(User user);
 }

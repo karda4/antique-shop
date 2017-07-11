@@ -48,4 +48,10 @@ public class User {
 		this.admin = admin;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", password=" + password + ", registered=" + registered + ", admin=" + admin + "]";
+	}
+		
+	
 }

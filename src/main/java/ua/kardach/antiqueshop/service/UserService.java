@@ -12,8 +12,20 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public User addUser(User user){
+	public boolean saveUser(User user){
 		return userDao.addUser(user);
+	}
+	
+	public User addUser() {
+		User user = createUser();
+		if(saveUser(user)){
+			return user;
+		}
+		return null;
+	}
+	
+	private User createUser(){
+		return new User();
 	}
 
 	public User getUserByName(String name){
@@ -27,4 +39,6 @@ public class UserService {
 	public boolean deleteUser(User user){
 		return userDao.deleteUser(user);
 	}
+
+	
 }

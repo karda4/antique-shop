@@ -3,5 +3,9 @@
 <head>
 <title><spring:message code="html_title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>" type="text/css" />
+
+<link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css" />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="<c:url value="/resources/js/jquery-3.2.0.min.js" />"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 </head>

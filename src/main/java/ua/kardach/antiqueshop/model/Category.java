@@ -1,11 +1,11 @@
 package ua.kardach.antiqueshop.model;
 
-public class EstimatedCategory {
+public class Category {
 
 	private long id;
 	private String name;
 
-	public EstimatedCategory() {
+	public Category() {
 
 	}
 
@@ -24,4 +24,10 @@ public class EstimatedCategory {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + "]";
+	}
+		
 }

@@ -15,4 +15,5 @@ public abstract class AbstractSpringJdbcDao {
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
+	
 }
