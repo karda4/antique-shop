@@ -4,6 +4,9 @@ import java.util.List;
 
 import ua.kardach.antiqueshop.model.OrderLine;
 
+/**
+ * @author Yura Kardach
+ */
 public interface OrderLineDao {
 
 	// create

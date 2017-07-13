@@ -2,6 +2,9 @@ package ua.kardach.antiqueshop.dao;
 
 import ua.kardach.antiqueshop.model.Order;
 
+/**
+ * @author Yura Kardach
+ */
 public interface OrderDao {
 
 	// create

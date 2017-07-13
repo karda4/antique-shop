@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import ua.kardach.antiqueshop.dao.ImageDao;
 import ua.kardach.antiqueshop.model.Image;
 
+/**
+ * @author Yura Kardach
+ */
 @Repository
 public class ImageSpringJdbcDao extends AbstractSpringJdbcDao implements ImageDao{
 	

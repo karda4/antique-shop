@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+/**
+ * @author Yura Kardach
+ */
 public class SessionInterceptor extends HandlerInterceptorAdapter{
 	
 	@Override

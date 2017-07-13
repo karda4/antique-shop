@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import ua.kardach.antiqueshop.dao.ProductDao;
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 @Repository
 public class ProductSpringJdbcDao extends AbstractSpringJdbcDao implements ProductDao{
 	

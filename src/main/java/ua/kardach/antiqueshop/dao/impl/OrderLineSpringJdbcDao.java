@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 import ua.kardach.antiqueshop.dao.OrderLineDao;
 import ua.kardach.antiqueshop.model.OrderLine;
 
+/**
+ * @author Yura Kardach
+ */
 @Repository
 public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements OrderLineDao{
 	

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import ua.kardach.antiqueshop.dao.CategoryDao;
 import ua.kardach.antiqueshop.model.Category;
 
+/**
+ * @author Yura Kardach
+ */
 @Repository
 public class CategorySpringJdbcDao extends AbstractSpringJdbcDao implements CategoryDao{
 	

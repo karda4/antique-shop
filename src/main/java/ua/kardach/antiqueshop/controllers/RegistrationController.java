@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ua.kardach.antiqueshop.model.User;
 import ua.kardach.antiqueshop.service.UserService;
 
+/**
+ * @author Yura Kardach
+ */
 @Controller
 public class RegistrationController {
 	

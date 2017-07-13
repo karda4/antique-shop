@@ -9,6 +9,9 @@ import ua.kardach.antiqueshop.dao.UserDao;
 import ua.kardach.antiqueshop.model.Order;
 import ua.kardach.antiqueshop.model.User;
 
+/**
+ * @author Yura Kardach
+ */
 @Service
 public class UserService {
 	

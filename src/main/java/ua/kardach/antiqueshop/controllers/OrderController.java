@@ -16,6 +16,9 @@ import ua.kardach.antiqueshop.service.OrderLineService;
 import ua.kardach.antiqueshop.service.ProductService;
 import ua.kardach.antiqueshop.service.UserService;
 
+/**
+ * @author Yura Kardach
+ */
 @Controller
 public class OrderController {
 	

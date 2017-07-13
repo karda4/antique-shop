@@ -7,6 +7,9 @@ import ua.kardach.antiqueshop.dao.ImageDao;
 import ua.kardach.antiqueshop.model.Image;
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 @Service
 public class ImageService {
 

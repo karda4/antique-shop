@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.kardach.antiqueshop.model.Product;
 import ua.kardach.antiqueshop.service.ProductService;
 
+
+/**
+ * @author Yura Kardach
+ */
 @Controller
 public class MainController {
-	
+
 	@Autowired
-	private ProductService productService; 
+	private ProductService productService;
 
 	@RequestMapping("/")
 	public String redirectToMainPage() {
@@ -27,7 +31,7 @@ public class MainController {
 	public String showMainPage(HttpSession session, Model model) {
 		List<Product> products = productService.getAllProducts();
 		model.addAttribute("products", products);
-		
+
 		return "main";
 	}
 }

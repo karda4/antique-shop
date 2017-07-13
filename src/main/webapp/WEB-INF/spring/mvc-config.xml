@@ -7,9 +7,9 @@
 	<context:component-scan base-package="ua.kardach.antiqueshop" />
 
 	<mvc:annotation-driven />
-	
+
 	<mvc:resources location="/resources/" mapping="/resources/**" />
-	
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -18,6 +18,21 @@
 			<bean class="ua.kardach.antiqueshop.interceptors.SessionInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+
+	<!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">error/error</prop>
+				<prop key="java.lang.RuntimeException">error/error</prop>
+			</props>
+		</property>
+		<property name="statusCodes">
+			<props>
+				<prop key="error/404">404</prop>
+				<prop key="error/error">500</prop>
+			</props>
+		</property>
+	</bean> -->
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- Example: a logical view name of 'showMessage' is mapped to '/WEB-INF/jsp/showMessage.jsp' -->

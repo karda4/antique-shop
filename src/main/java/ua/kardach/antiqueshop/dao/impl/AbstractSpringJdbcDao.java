@@ -3,6 +3,9 @@ package ua.kardach.antiqueshop.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * @author Yura Kardach
+ */
 public abstract class AbstractSpringJdbcDao {
 	
 	@Autowired

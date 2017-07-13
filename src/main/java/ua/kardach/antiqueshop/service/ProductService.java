@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import ua.kardach.antiqueshop.dao.ProductDao;
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 @Service
 public class ProductService {
 

@@ -1,5 +1,8 @@
 package ua.kardach.antiqueshop.model;
 
+/**
+ * @author Yura Kardach
+ */
 public class Image {
 
 	private long id;

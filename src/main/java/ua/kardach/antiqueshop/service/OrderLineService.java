@@ -10,6 +10,9 @@ import ua.kardach.antiqueshop.model.Order;
 import ua.kardach.antiqueshop.model.OrderLine;
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 @Service
 public class OrderLineService {
 

@@ -4,6 +4,9 @@ import java.util.List;
 
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 public interface ProductDao {
 
 	// create

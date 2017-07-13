@@ -3,6 +3,9 @@ package ua.kardach.antiqueshop.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Yura Kardach
+ */
 public class Order{
 
 	private long id;

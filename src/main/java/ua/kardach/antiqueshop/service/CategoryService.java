@@ -7,6 +7,9 @@ import ua.kardach.antiqueshop.dao.CategoryDao;
 import ua.kardach.antiqueshop.model.Category;
 import ua.kardach.antiqueshop.model.Product;
 
+/**
+ * @author Yura Kardach
+ */
 @Service
 public class CategoryService {
 

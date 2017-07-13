@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 import ua.kardach.antiqueshop.dao.UserDao;
 import ua.kardach.antiqueshop.model.User;
 
+/**
+ * @author Yura Kardach
+ */
 @Repository
 public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao {
 	

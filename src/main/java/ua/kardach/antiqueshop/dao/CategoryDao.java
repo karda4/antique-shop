@@ -2,6 +2,9 @@ package ua.kardach.antiqueshop.dao;
 
 import ua.kardach.antiqueshop.model.Category;
 
+/**
+ * @author Yura Kardach
+ */
 public interface CategoryDao {
 
 	//create
