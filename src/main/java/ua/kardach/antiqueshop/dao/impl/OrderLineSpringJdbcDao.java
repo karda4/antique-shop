@@ -22,6 +22,7 @@ public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements Ord
 	private final static String SQL_SELECT_ORDER_LINE_BY_ID = "SELECT * FROM order_line WHERE id=?";
 	private final static String SQL_SELECT_ORDER_LINES_BY_ORDER_ID = "SELECT * FROM order_line WHERE order_id=?";
 	private final static String SQL_INSERT_ORDER_LINE_WITH_RETURNED_KEY = "INSERT INTO order_line (order_id, product_id, amount) VALUES (?, ?, ?)";
+	private final static String SQL_DELETE_ORDER_LINE_BY_ID = "DELETE FROM order_line WHERE id=?";
 	
 	
 	@Override
@@ -61,7 +62,8 @@ public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements Ord
 
 	@Override
 	public boolean deleteOrderLine(OrderLine orderLine) {
-		throw new UnsupportedOperationException();
+		int rows = getJdbcTemplate().update(SQL_DELETE_ORDER_LINE_BY_ID, new Object[]{orderLine.getId()});
+		return rows == 1;
 	}
 
 	private static class OrderLineRowMapper implements RowMapper<OrderLine>{

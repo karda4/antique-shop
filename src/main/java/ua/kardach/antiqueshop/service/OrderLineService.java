@@ -20,14 +20,14 @@ public class OrderLineService {
 		return orderLineDao.addOrderLine(orderLine);
 	}
 	
-	public OrderLine addOrderLine(Order order, Product product, int amount){
+	public boolean addOrderLine(Order order, Product product, int amount){
+		if(order == null) return false;
 		OrderLine orderLine = createOrderLine(order, product, amount);
 		if(saveOrderLine(orderLine)){
 			order.addOrderLine(orderLine);
-			return orderLine;
+			return true;
 		}
-		System.out.println("OrderLineService: added order line " + orderLine);
-		return null;
+		return false;
 	}
 	
 	private OrderLine createOrderLine(Order order, Product product, int amount){
@@ -50,7 +50,11 @@ public class OrderLineService {
 		return orderLineDao.updateOrderLine(orderLine);
 	}
 
-	public boolean deleteOrderLine(OrderLine orderLine){
-		return orderLineDao.deleteOrderLine(orderLine);
+	public boolean deleteOrderLine(Order order, OrderLine orderLine){		
+		if(orderLineDao.deleteOrderLine(orderLine)){
+			order.removeOrderLine(orderLine);
+			return true;
+		}
+		return false;
 	}
 }

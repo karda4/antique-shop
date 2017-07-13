@@ -8,11 +8,14 @@ public interface OrderDao {
 	public boolean addOrder(Order order);
 
 	// read
-	public Order getOrderById(long id);
+	public Order getOrderById(long orderId);
+	public Order getOrderByUserId(long userId);
 
 	// update
 	public boolean updateOrder(Order order);
 
 	// delete
 	public boolean deleteOrder(Order order);
+
+	
 }

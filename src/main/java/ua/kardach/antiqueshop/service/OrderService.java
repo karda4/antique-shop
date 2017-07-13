@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import ua.kardach.antiqueshop.dao.OrderDao;
 import ua.kardach.antiqueshop.model.Order;
+import ua.kardach.antiqueshop.model.OrderLine;
 import ua.kardach.antiqueshop.model.User;
 
 @Service
@@ -16,6 +17,12 @@ public class OrderService {
 	private OrderLineService orderLineService;
 	
 	public boolean saveOrder(Order order){
+		if(order == null) return false;
+		if(order.getOrderLines() != null){
+			for(OrderLine orderLine : order.getOrderLines()){
+				orderLineService.saveOrderLine(orderLine);
+			}
+		}
 		return orderDao.addOrder(order);
 	}
 	
@@ -29,13 +36,21 @@ public class OrderService {
 	
 	private Order createOrder(User user){
 		Order order = new Order();
-		order.setUser(user);
+		user.setOrder(order);
 		return order;
 	}
 
-	public Order getOrderById(long id){
-		Order order = orderDao.getOrderById(id);
+	public Order getOrderById(long orderId){
+		Order order = orderDao.getOrderById(orderId);
 		order.setOrderLines(orderLineService.getOrderLines(order));
+		return order;
+	}
+	
+	public Order getOrderByUserId(long userId) {
+		Order order = orderDao.getOrderByUserId(userId);
+		if(order != null){
+			order.setOrderLines(orderLineService.getOrderLines(order));
+		}
 		return order;
 	}
 
@@ -44,6 +59,16 @@ public class OrderService {
 	}
 
 	public boolean deleteOrder(Order order){
+		if(order == null){
+			return false;
+		}
+		for(OrderLine orderLine : order.getOrderLines()){
+			orderLineService.deleteOrderLine(order, orderLine);
+		}
 		return orderDao.deleteOrder(order);
+	}
+
+	public Order cloneOrder(Order order){
+		return new Order(order);
 	}
 }

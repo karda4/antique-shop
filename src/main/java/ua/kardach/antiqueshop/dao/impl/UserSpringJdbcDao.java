@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +21,7 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 	
 	private final static String SQL_SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name=?";
 	private final static String SQL_INSERT_USER_WITH_RETURNED_KEY = "INSERT INTO user (name) VALUES (?)";
+	private final static String SQL_UPDATE_USER_BY_ID = "UPDATE user SET name=?, password=?, admin=?, registered=? WHERE id=?";
 	
 	@Override
 	public boolean addUser(User user) {
@@ -37,24 +39,31 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 		getJdbcTemplate().update(psc, keyHolder);
 		user.setId(keyHolder.getKey().longValue());
 		return true;
-		/*Map<String, Object> param = new HashMap<String, Object>();
-		param.put("name", user.getName());
-		param.put("password", user.getPassword());
-		param.put("admin", user.isAdmin() ? 1 : 0);
-		param.put("registered", user.isRegistered() ? 1 : 0);
-		Number id = getSimpleJdbcInsert().executeAndReturnKey(param);
-		user.setId(id.longValue());
-		return true;*/
 	}
 
 	@Override
 	public User getUserByName(String name) {
-		return getJdbcTemplate().queryForObject(SQL_SELECT_USER_BY_NAME, new Object[]{name}, new UserRowMapper());
+		List<User> userList = (List<User>) getJdbcTemplate().query(SQL_SELECT_USER_BY_NAME, new Object[]{name}, new UserRowMapper());
+		if(userList.isEmpty()){
+			return null;
+		}
+		else if(userList.size() == 1){
+			return userList.get(0);
+		}
+		throw new RuntimeException("Finded more then one user with name '" + name + "' in database!");
 	}
 
 	@Override
 	public boolean updateUser(User user) {
-		throw new UnsupportedOperationException();
+		Object[] param = {
+				user.getName(),
+				user.getPassword(),
+				user.isAdmin() ? 1 : 0,
+				user.isRegistered() ? 1 : 0,
+				user.getId()
+		};
+		int rows = getJdbcTemplate().update(SQL_UPDATE_USER_BY_ID, param);
+		return rows == 1;
 	}
 
 	@Override

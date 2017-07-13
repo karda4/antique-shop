@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +20,7 @@ import ua.kardach.antiqueshop.model.Order;
 public class OrderSpringJdbcDao extends AbstractSpringJdbcDao implements OrderDao{
 
 	private final static String SQL_SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE id=?";
+	private final static String SQL_SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders WHERE user_id=?";
 	private final static String SQL_INSERT_ORDER_WITH_RETURNED_KEY = "INSERT INTO orders(user_id) VALUES(?)";
 		
 	@Override
@@ -28,28 +30,35 @@ public class OrderSpringJdbcDao extends AbstractSpringJdbcDao implements OrderDa
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				final PreparedStatement ps = con.prepareStatement(SQL_INSERT_ORDER_WITH_RETURNED_KEY, Statement.RETURN_GENERATED_KEYS);
-				ps.setLong(1, order.getUser().getId());
+				ps.setLong(1, order.getUserId());
 				return ps;
 			}
 		};
 		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		getJdbcTemplate().update(psc, keyHolder);
-		order.setId(keyHolder.getKey().longValue());
-		return true;
-		
-		/*Map<String, Object> param = new HashMap<String, Object>();
-		param.put("user_id", order.getUserId());
-		Number id = getSimpleJdbcInsert().executeAndReturnKey(param);
-		order.setId(id.longValue());
-		return true;*/
-		/*int rows = getJdbcTemplate().update(SQL_INSERT_ORDER, new Object[] { order.getUserId()});
-		return rows == 1;*/
+		int rows = getJdbcTemplate().update(psc, keyHolder);
+		if(rows == 1){
+			order.setId(keyHolder.getKey().longValue());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public Order getOrderById(long id) {
-		return getJdbcTemplate().queryForObject(SQL_SELECT_ORDER_BY_ID, new Object[]{id}, new OrderRowMapper());
+	public Order getOrderById(long orderId) {
+		return getJdbcTemplate().queryForObject(SQL_SELECT_ORDER_BY_ID, new Object[]{orderId}, new OrderRowMapper());
+	}
+	
+	@Override
+	public Order getOrderByUserId(long userId) {
+		List<Order> list = (List<Order>)getJdbcTemplate().query(SQL_SELECT_ORDER_BY_USER_ID, new Object[]{userId}, new OrderRowMapper());
+		if(list.isEmpty()){
+			return null;
+		}
+		else if(list.size() == 1){
+			return list.get(0);
+		}
+		throw new RuntimeException("Finded more then one order with userId '" + userId + "' in database!");
 	}
 
 	@Override
