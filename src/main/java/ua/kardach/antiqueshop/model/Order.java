@@ -6,19 +6,19 @@ import java.util.List;
 /**
  * @author Yura Kardach
  */
-public class Order{
+public class Order {
 
 	private long id;
 	private long userId;
+	
 	private List<OrderLine> orderLines;
-	
 	private int totalPrice;
-	
-	public Order(){
-		
+
+	public Order() {
+
 	}
-	
-	public Order(Order order){
+
+	public Order(Order order) {
 		setId(order.getId());
 		setUserId(order.getUserId());
 		setOrderLines(order.getOrderLines());
@@ -63,7 +63,7 @@ public class Order{
 		if (orderLines == null) {
 			return false;
 		}
-		if(orderLines.remove(orderLine)){
+		if (orderLines.remove(orderLine)) {
 			setOrderLines(orderLines);
 			return true;
 		}
@@ -77,16 +77,16 @@ public class Order{
 	public void setTotalPrice(int totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	
-	private void calculateTotalPrice(){
+
+	private void calculateTotalPrice() {
 		int totalPrice = 0;
-		for(OrderLine orderLine : orderLines){
-			totalPrice += orderLine.getProduct().getPrice();
+		if (getOrderLines() != null) {
+			for (OrderLine orderLine : getOrderLines()) {
+				totalPrice += orderLine.getProduct().getPrice();
+			}
 		}
 		setTotalPrice(totalPrice);
 	}
-
-	
 
 	@Override
 	public String toString() {

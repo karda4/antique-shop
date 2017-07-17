@@ -18,35 +18,40 @@ public class OrderLineService {
 
 	@Autowired
 	private OrderLineDao orderLineDao;
+	@Autowired
+	private ProductService productService;
 	
 	public boolean saveOrderLine(OrderLine orderLine){
 		return orderLineDao.addOrderLine(orderLine);
 	}
 	
-	public boolean addOrderLine(Order order, Product product, int amount){
-		if(order == null) return false;
-		OrderLine orderLine = createOrderLine(order, product, amount);
+	public OrderLine addOrderLine(Product product, int amount){
+		OrderLine orderLine = createOrderLine(product, amount);
 		if(saveOrderLine(orderLine)){
-			order.addOrderLine(orderLine);
-			return true;
+			return orderLine;
 		}
-		return false;
+		return null;
 	}
 	
-	private OrderLine createOrderLine(Order order, Product product, int amount){
+	private OrderLine createOrderLine(Product product, int amount){
 		OrderLine orderLine = new OrderLine();
-		orderLine.setOrder(order);
 		orderLine.setProduct(product);
 		orderLine.setAmount(amount);
 		return orderLine;
 	}
 
 	public OrderLine getOrderLineById(long id){
-		return orderLineDao.getOrderLineById(id);
+		OrderLine orderLine = orderLineDao.getOrderLineById(id);
+		setProductFor(orderLine);
+		return orderLine;
 	}
 	
 	public List<OrderLine> getOrderLines(Order order){
-		return orderLineDao.getOrderLinesByOrderId(order.getId());
+		List<OrderLine> orderLines = orderLineDao.getOrderLinesByOrderId(order.getId());
+		for(OrderLine orderLine : orderLines){
+			setProductFor(orderLine);
+		}
+		return orderLines;
 	}
 
 	public boolean updateOrderLine(OrderLine orderLine){
@@ -54,10 +59,10 @@ public class OrderLineService {
 	}
 
 	public boolean deleteOrderLine(Order order, OrderLine orderLine){		
-		if(orderLineDao.deleteOrderLine(orderLine)){
-			order.removeOrderLine(orderLine);
-			return true;
-		}
-		return false;
+		return orderLineDao.deleteOrderLine(orderLine);
+	}
+	
+	private void setProductFor(OrderLine orderLine){
+		orderLine.setProduct(productService.getProductById(orderLine.getProductId()));
 	}
 }

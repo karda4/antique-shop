@@ -26,7 +26,7 @@ import ua.kardach.antiqueshop.service.UserService;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginControllerTest {
 
-	private MockMvc mockMvc;
+	/*private MockMvc mockMvc;
 	
 	@Mock
 	private UserService userServiceMock;
@@ -75,7 +75,7 @@ public class LoginControllerTest {
 		viewResolver.setSuffix(".jsp");
 		
 		return viewResolver;
-	}
+	}*/
 	
 	
 }

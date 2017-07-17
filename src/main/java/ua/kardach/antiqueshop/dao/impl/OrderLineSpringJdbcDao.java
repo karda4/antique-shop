@@ -35,7 +35,7 @@ public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements Ord
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				final PreparedStatement ps = con.prepareStatement(SQL_INSERT_ORDER_LINE_WITH_RETURNED_KEY, Statement.RETURN_GENERATED_KEYS);
-				ps.setLong(1, orderLine.getOrder().getId());
+				ps.setLong(1, orderLine.getOrderId());
 				ps.setLong(2, orderLine.getProduct().getId());
 				ps.setInt(3, orderLine.getAmount());
 				return ps;

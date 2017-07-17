@@ -35,8 +35,8 @@ public class OrderController {
 		
 		userService.createIfNotExistSessionUser(session);
 		User user = (User) session.getAttribute("user");
-		
-		orderLineService.addOrderLine(user.getOrder(), product, amount);
+		OrderLine orderLine = orderLineService.addOrderLine(product, amount);
+		user.getOrder().addOrderLine(orderLine);
 		return "redirect:/main";
 	}
 	

@@ -1,7 +1,11 @@
 package ua.kardach.antiqueshop.controllers;
 
+//import java.util.logging.Logger;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,28 +23,14 @@ import ua.kardach.antiqueshop.service.UserService;
  */
 @Controller
 public class LoginController {
+	
+	private Logger logger = LogManager.getLogger(LoginController.class);
 
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private OrderService orderService;
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public OrderService getOrderService() {
-		return orderService;
-	}
-
-	public void setOrderService(OrderService orderService) {
-		this.orderService = orderService;
-	}
-
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String showLoginForm(Model model) {
 		return "login";
@@ -51,12 +41,14 @@ public class LoginController {
 		User loginUser = userService.getUserByName(name);
 		if (loginUser == null) {
 			model.addAttribute("loginError", "There isn't user with name '" + name + "'.");
+			logger.info("There isn't user with name '" + name + "'.");
 			return "login";
 		} else if (!loginUser.getPassword().equals(password)) {
 			model.addAttribute("loginError", "Incorrect password.");
+			logger.info("Incorrect password=" + password + " for user=" + loginUser);
 			return "login";
 		}
-
+		logger.info("Logged user=" + loginUser);
 		User sessionUser = (User) session.getAttribute("user");
 		if (sessionUser != null) {
 			if (sessionUser.getOrder() != null) {
@@ -74,6 +66,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
+		logger.info("user=" + session.getAttribute("user") + " is logout.");
 		session.removeAttribute("user");
 		return "redirect:/main";
 	}

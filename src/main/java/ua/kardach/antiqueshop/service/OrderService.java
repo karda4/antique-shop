@@ -65,6 +65,7 @@ public class OrderService {
 		if(order == null){
 			return false;
 		}
+		//order.getOrderLines().forEach(line -> orderLineService.deleteOrderLine(order, line));
 		for(OrderLine orderLine : order.getOrderLines()){
 			orderLineService.deleteOrderLine(order, orderLine);
 		}

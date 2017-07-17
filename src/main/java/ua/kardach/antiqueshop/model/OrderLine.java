@@ -7,7 +7,6 @@ public class OrderLine {
 
 	private long id;
 	private long orderId;
-	private Order order;
 	private long productId;
 	private Product product;
 	private int amount;
@@ -26,15 +25,6 @@ public class OrderLine {
 
 	public void setOrderId(long orderId) {
 		this.orderId = orderId;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-		setOrderId(order.getId());
 	}
 
 	public long getProductId() {
@@ -64,7 +54,7 @@ public class OrderLine {
 
 	@Override
 	public String toString() {
-		return "OrderLine [id=" + id + ", order=" + order + ", product=" + product + ", amount=" + amount + "]";
+		return "OrderLine [id=" + id + ", orderId=" + orderId + ", product=" + product + ", amount=" + amount + "]";
 	}
 
 	@Override
