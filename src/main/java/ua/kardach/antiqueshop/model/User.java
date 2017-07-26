@@ -1,5 +1,7 @@
 package ua.kardach.antiqueshop.model;
 
+import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,6 +19,7 @@ public class User {
 	private String password;
 	private boolean registered;
 	private boolean admin;
+	private Set<Role> roles;
 	
 	//
 	private Order order;
@@ -54,11 +57,15 @@ public class User {
 	}
 
 	public boolean isAdmin() {
-		return admin;
+		return roles.contains(Role.ADMIN);
 	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 	
 	public Order getOrder() {

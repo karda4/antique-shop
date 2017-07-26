@@ -19,6 +19,8 @@ public class UserService {
 	private UserDao userDao;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private RoleService roleService;
 	
 	public boolean saveUser(User user){
 		return userDao.addUser(user);
@@ -40,6 +42,7 @@ public class UserService {
 		User user = userDao.getUserByName(name);
 		Order order = orderService.getOrderByUserId(user.getId());
 		user.setOrder(order);
+		user.setRoles(roleService.getAllByUserId(user.getId()));
 		return user;
 	}
 	

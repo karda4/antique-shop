@@ -22,6 +22,11 @@ import ua.kardach.antiqueshop.model.User;
 @Repository
 public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao {
 	
+	/*private final static String SQL_SELECT_USER_BY_NAME = "SELECT user.*, role.name AS role_name " +
+														  "FROM user " +
+														  "LEFT JOIN role_user ON user.id=role_user.user_id " + 
+														  "LEFT JOIN role ON role_user.role_id=role.id " + 
+														  "WHERE user.name=?";*/
 	private final static String SQL_SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name=?";
 	private final static String SQL_INSERT_USER_WITH_RETURNED_KEY = "INSERT INTO user (name) VALUES (?)";
 	private final static String SQL_UPDATE_USER_BY_ID = "UPDATE user SET name=?, password=?, admin=?, registered=? WHERE id=?";
@@ -82,7 +87,9 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 			user.setId(rs.getLong("id"));
 			user.setName(rs.getString("name"));
 			user.setPassword(rs.getString("password"));
-			user.setAdmin(rs.getInt("admin") == 1);
+			/*String roleName = rs.getString("role_name");
+			user.setAdmin(roleName != null ? roleName.equals("admin") : false);*/
+			//user.setAdmin(rs.getInt("admin") == 1);
 			user.setRegistered(rs.getInt("registered") == 1);
 			return user;
 		}
