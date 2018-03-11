@@ -2,34 +2,40 @@ package ua.kardach.antiqueshop.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import ua.kardach.antiqueshop.dao.OrderLineDao;
+import ua.kardach.antiqueshop.dao.impl.row_mapper.OrderLineRowMapper;
 import ua.kardach.antiqueshop.model.OrderLine;
 
 /**
  * @author Yura Kardach
  */
 @Repository
-public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements OrderLineDao{
+public class OrderLineSpringJdbcDao implements OrderLineDao{
 	
-	private final static String SQL_SELECT_ORDER_LINE_BY_ID = "SELECT * FROM order_line WHERE id=?";
-	private final static String SQL_SELECT_ORDER_LINES_BY_ORDER_ID = "SELECT * FROM order_line WHERE order_id=?";
-	private final static String SQL_INSERT_ORDER_LINE_WITH_RETURNED_KEY = "INSERT INTO order_line (order_id, product_id, amount) VALUES (?, ?, ?)";
-	private final static String SQL_DELETE_ORDER_LINE_BY_ID = "DELETE FROM order_line WHERE id=?";
+	public final static String SQL_SELECT_ORDER_LINE_BY_ID = "SELECT * FROM order_line WHERE id=?";
+	public final static String SQL_SELECT_ORDER_LINE_ALL = "SELECT * FROM order_line";
+	public final static String SQL_SELECT_ORDER_LINES_BY_ORDER_ID = "SELECT * FROM order_line WHERE order_id=?";
+	public final static String SQL_INSERT_ORDER_LINE_WITH_RETURNED_KEY = "INSERT INTO order_line (order_id, product_id, amount) VALUES (?, ?, ?)";
+	public final static String SQL_DELETE_ORDER_LINE_BY_ID = "DELETE FROM order_line WHERE id=?";
 	
+	@Autowired
+	protected JdbcTemplate jdbcTemplate;
+	@Autowired
+	private OrderLineRowMapper mapper;
 	
 	@Override
-	public boolean addOrderLine(OrderLine orderLine) {
+	public OrderLine insert(OrderLine orderLine) {
 		final PreparedStatementCreator psc = new PreparedStatementCreator() {
 			
 			@Override
@@ -43,43 +49,34 @@ public class OrderLineSpringJdbcDao extends AbstractSpringJdbcDao implements Ord
 		};
 		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		getJdbcTemplate().update(psc, keyHolder);
+		jdbcTemplate.update(psc, keyHolder);
 		orderLine.setId(keyHolder.getKey().longValue());
-		return true;
+		return orderLine;
 	}
 	
 	@Override
-	public OrderLine getOrderLineById(long id) {
-		return getJdbcTemplate().queryForObject(SQL_SELECT_ORDER_LINE_BY_ID, new Object[]{id}, new OrderLineRowMapper());
+	public OrderLine findById(Long id) {
+		return jdbcTemplate.queryForObject(SQL_SELECT_ORDER_LINE_BY_ID, mapper, id);
+	}
+	
+	@Override
+	public List<OrderLine> findAll() {
+		return jdbcTemplate.query(SQL_SELECT_ORDER_LINE_ALL, mapper);
 	}
 	
 	@Override
 	public List<OrderLine> getOrderLinesByOrderId(long orderId) {
-		return getJdbcTemplate().query(SQL_SELECT_ORDER_LINES_BY_ORDER_ID, new Object[]{orderId}, new OrderLineRowMapper());
+		return jdbcTemplate.query(SQL_SELECT_ORDER_LINES_BY_ORDER_ID, mapper, orderId);
 	}
 
 	@Override
-	public boolean updateOrderLine(OrderLine orderLine) {
+	public void update(OrderLine orderLine) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean deleteOrderLine(OrderLine orderLine) {
-		int rows = getJdbcTemplate().update(SQL_DELETE_ORDER_LINE_BY_ID, new Object[]{orderLine.getId()});
-		return rows == 1;
+	public void delete(OrderLine orderLine) {
+		jdbcTemplate.update(SQL_DELETE_ORDER_LINE_BY_ID, orderLine.getId());
 	}
 
-	private static class OrderLineRowMapper implements RowMapper<OrderLine>{
-
-		@Override
-		public OrderLine mapRow(ResultSet rs, int rowNum) throws SQLException {
-			OrderLine orderLine = new OrderLine();
-			orderLine.setId(rs.getLong("id"));
-			orderLine.setOrderId(rs.getLong("order_id"));
-			orderLine.setProductId(rs.getLong("product_id"));
-			orderLine.setAmount(rs.getInt("amount"));
-			return orderLine;
-		}
-		
-	}
 }

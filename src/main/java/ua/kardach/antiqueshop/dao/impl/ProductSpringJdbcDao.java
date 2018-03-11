@@ -1,62 +1,52 @@
 package ua.kardach.antiqueshop.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ua.kardach.antiqueshop.dao.ProductDao;
+import ua.kardach.antiqueshop.dao.impl.row_mapper.ProductRowMapper;
 import ua.kardach.antiqueshop.model.Product;
 
 /**
  * @author Yura Kardach
  */
 @Repository
-public class ProductSpringJdbcDao extends AbstractSpringJdbcDao implements ProductDao{
+public class ProductSpringJdbcDao implements ProductDao{
 	
-	private final static String SQL_SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id=?";
-	private final static String SQL_SELECT_ALL_PRODUCTS = "SELECT * FROM product";
+	public final static String SQL_SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE id=?";
+	public final static String SQL_SELECT_ALL_PRODUCTS = "SELECT * FROM product";
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private ProductRowMapper mapper;
 
 	@Override
-	public Product addProduct(Product product) {
+	public Product insert(Product product) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Product getProductById(long id) {
-		return getJdbcTemplate().queryForObject(SQL_SELECT_PRODUCT_BY_ID, new Object[]{id}, new ProductRowMapper());
+	public Product findById(Long id) {
+		return jdbcTemplate.queryForObject(SQL_SELECT_PRODUCT_BY_ID, mapper, id);
 	}
 	
 	@Override
-	public List<Product> getAllProducts() {
-		return getJdbcTemplate().query(SQL_SELECT_ALL_PRODUCTS, new ProductRowMapper());
+	public List<Product> findAll() {
+		return jdbcTemplate.query(SQL_SELECT_ALL_PRODUCTS, mapper);
 	}
 
 	@Override
-	public boolean updateProduct(Product product) {
+	public void update(Product product) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean deleteProduct(Product product) {
+	public void delete(Product product) {
 		throw new UnsupportedOperationException();
 	}	
 	
-	private static class ProductRowMapper implements RowMapper<Product>{
-
-		@Override
-		public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Product product = new Product();
-			product.setId(rs.getLong("id"));
-			product.setName(rs.getString("name"));
-			product.setDescription(rs.getString("description"));
-			product.setImageId(rs.getLong("image_id"));
-			product.setCategoryId(rs.getLong("category_id"));
-			product.setPrice(rs.getInt("price"));
-			return product;
-		}
-		
-	}
 }

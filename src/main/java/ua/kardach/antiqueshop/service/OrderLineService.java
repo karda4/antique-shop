@@ -21,16 +21,13 @@ public class OrderLineService {
 	@Autowired
 	private ProductService productService;
 	
-	public boolean saveOrderLine(OrderLine orderLine){
-		return orderLineDao.addOrderLine(orderLine);
+	public OrderLine insert(OrderLine orderLine){
+		return orderLineDao.insert(orderLine);
 	}
 	
 	public OrderLine addOrderLine(Product product, int amount){
 		OrderLine orderLine = createOrderLine(product, amount);
-		if(saveOrderLine(orderLine)){
-			return orderLine;
-		}
-		return null;
+		return insert(orderLine);
 	}
 	
 	private OrderLine createOrderLine(Product product, int amount){
@@ -40,8 +37,8 @@ public class OrderLineService {
 		return orderLine;
 	}
 
-	public OrderLine getOrderLineById(long id){
-		OrderLine orderLine = orderLineDao.getOrderLineById(id);
+	public OrderLine findById(long id){
+		OrderLine orderLine = orderLineDao.findById(id);
 		setProductFor(orderLine);
 		return orderLine;
 	}
@@ -54,15 +51,15 @@ public class OrderLineService {
 		return orderLines;
 	}
 
-	public boolean updateOrderLine(OrderLine orderLine){
-		return orderLineDao.updateOrderLine(orderLine);
+	public void update(OrderLine orderLine){
+		orderLineDao.update(orderLine);
 	}
 
-	public boolean deleteOrderLine(Order order, OrderLine orderLine){		
-		return orderLineDao.deleteOrderLine(orderLine);
+	public void delete(Order order, OrderLine orderLine){		
+		orderLineDao.delete(orderLine);
 	}
 	
 	private void setProductFor(OrderLine orderLine){
-		orderLine.setProduct(productService.getProductById(orderLine.getProductId()));
+		orderLine.setProduct(productService.findById(orderLine.getProduct().getId()));
 	}
 }

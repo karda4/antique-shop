@@ -5,9 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ua.kardach.antiqueshop.model.Product;
 import ua.kardach.antiqueshop.service.ProductService;
@@ -16,22 +16,16 @@ import ua.kardach.antiqueshop.service.ProductService;
 /**
  * @author Yura Kardach
  */
-@Controller
+@RestController
 public class MainController {
 
 	@Autowired
 	private ProductService productService;
 
-	@RequestMapping("/")
-	public String redirectToMainPage() {
-		return "redirect:/main";
-	}
+	@GetMapping("/")
+	public List<Product> showMainPage(HttpSession session, Model model) {
+		List<Product> products = productService.findAll();
 
-	@RequestMapping("/main")
-	public String showMainPage(HttpSession session, Model model) {
-		List<Product> products = productService.getAllProducts();
-		model.addAttribute("products", products);
-
-		return "main";
+		return products;
 	}
 }

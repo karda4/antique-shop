@@ -5,17 +5,6 @@ import ua.kardach.antiqueshop.model.Image;
 /**
  * @author Yura Kardach
  */
-public interface ImageDao {
+public interface ImageDao extends AbstractDao<Image, Long> {
 
-	// create
-	public Image addImage(Image image);
-
-	// read
-	public Image getImageById(long id);
-
-	// update
-	public boolean updateImage(Image image);
-
-	// delete
-	public boolean deleteImage(Image image);
 }

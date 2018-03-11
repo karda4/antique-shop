@@ -16,24 +16,24 @@ public class ImageService {
 	@Autowired
 	private ImageDao imageDao;
 
-	public Image addImage(Image image){
-		return imageDao.addImage(image);
+	public Image insert(Image image){
+		return imageDao.insert(image);
 	}
 
-	public Image getImageById(long id){
-		return imageDao.getImageById(id);
+	public Image findById(long id){
+		return imageDao.findById(id);
 	}
 	
 	public Image getImage(Product product){
-		return imageDao.getImageById(product.getImageId());
+		return imageDao.findById(product.getImage().getId());
 	}
 
-	public boolean updateImage(Image image){
-		return imageDao.updateImage(image);
+	public void update(Image image){
+		imageDao.update(image);
 	}
 
-	public boolean deleteImage(Image image){
-		return imageDao.deleteImage(image);
+	public void delete(Image image){
+		imageDao.delete(image);
 	}
 
 }

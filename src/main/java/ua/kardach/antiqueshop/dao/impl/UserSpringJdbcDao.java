@@ -2,37 +2,41 @@ package ua.kardach.antiqueshop.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import ua.kardach.antiqueshop.dao.UserDao;
+import ua.kardach.antiqueshop.dao.impl.row_mapper.UserRowMapper;
 import ua.kardach.antiqueshop.model.User;
 
 /**
  * @author Yura Kardach
  */
 @Repository
-public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao {
+public class UserSpringJdbcDao implements UserDao {
 	
-	/*private final static String SQL_SELECT_USER_BY_NAME = "SELECT user.*, role.name AS role_name " +
-														  "FROM user " +
-														  "LEFT JOIN role_user ON user.id=role_user.user_id " + 
-														  "LEFT JOIN role ON role_user.role_id=role.id " + 
-														  "WHERE user.name=?";*/
-	private final static String SQL_SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name=?";
-	private final static String SQL_INSERT_USER_WITH_RETURNED_KEY = "INSERT INTO user (name) VALUES (?)";
-	private final static String SQL_UPDATE_USER_BY_ID = "UPDATE user SET name=?, password=?, admin=?, registered=? WHERE id=?";
+	public final static String SQL_SELECT_USER_BY_NAME = "SELECT * FROM users WHERE name=?";
+	public final static String SQL_SELECT_USER_BY_ID = "SELECT * FROM users WHERE id=?";
+	public final static String SQL_SELECT_USER_ALL = "SELECT * FROM users";
+	
+	public final static String SQL_INSERT_USER_WITH_RETURNED_KEY = "INSERT INTO users (name) VALUES (?)";
+	public final static String SQL_UPDATE_USER_BY_ID = "UPDATE users SET name=?, password=?, admin=?, registered=? WHERE id=?";
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private UserRowMapper mapper;
 	
 	@Override
-	public boolean addUser(User user) {
+	public User insert(User user) {
 		final PreparedStatementCreator psc = new PreparedStatementCreator() {
 			
 			@Override
@@ -44,14 +48,13 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 		};
 		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		getJdbcTemplate().update(psc, keyHolder);
-		user.setId(keyHolder.getKey().longValue());
-		return true;
+		Long id = keyHolder.getKey().longValue();
+		return findById(id);
 	}
 
 	@Override
-	public User getUserByName(String name) {
-		List<User> userList = (List<User>) getJdbcTemplate().query(SQL_SELECT_USER_BY_NAME, new Object[]{name}, new UserRowMapper());
+	public User findByName(String name) {
+		List<User> userList = jdbcTemplate.query(SQL_SELECT_USER_BY_NAME, new Object[]{name}, new UserRowMapper());
 		if(userList.isEmpty()){
 			return null;
 		}
@@ -60,9 +63,19 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 		}
 		throw new RuntimeException("Finded more then one user with name '" + name + "' in database!");
 	}
+	
+	@Override
+	public List<User> findAll() {
+		return jdbcTemplate.query(SQL_SELECT_USER_ALL, mapper);
+	}
 
 	@Override
-	public boolean updateUser(User user) {
+	public User findById(Long id) {
+		return jdbcTemplate.queryForObject(SQL_SELECT_USER_BY_ID, mapper, id);
+	}
+
+	@Override
+	public void update(User user) {
 		Object[] param = {
 				user.getName(),
 				user.getPassword(),
@@ -70,29 +83,12 @@ public class UserSpringJdbcDao extends AbstractSpringJdbcDao implements UserDao 
 				user.isRegistered() ? 1 : 0,
 				user.getId()
 		};
-		int rows = getJdbcTemplate().update(SQL_UPDATE_USER_BY_ID, param);
-		return rows == 1;
+		jdbcTemplate.update(SQL_UPDATE_USER_BY_ID, param);
 	}
 
 	@Override
-	public boolean deleteUser(User user) {
+	public void delete(User user) {
 		throw new UnsupportedOperationException();
 	}
 
-	private static class UserRowMapper implements RowMapper<User>{
-
-		@Override
-		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-			User user = new User();
-			user.setId(rs.getLong("id"));
-			user.setName(rs.getString("name"));
-			user.setPassword(rs.getString("password"));
-			/*String roleName = rs.getString("role_name");
-			user.setAdmin(roleName != null ? roleName.equals("admin") : false);*/
-			//user.setAdmin(rs.getInt("admin") == 1);
-			user.setRegistered(rs.getInt("registered") == 1);
-			return user;
-		}
-		
-	}
 }	

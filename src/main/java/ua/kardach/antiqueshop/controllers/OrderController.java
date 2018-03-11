@@ -31,7 +31,7 @@ public class OrderController {
 
 	@RequestMapping(value="/order/{productId}/{amount}", method=RequestMethod.POST)
 	public String addOrderLineToOrder(@PathVariable long productId, @PathVariable int amount, HttpSession session){
-		Product product = productService.getProductById(productId);
+		Product product = productService.findById(productId);
 		
 		userService.createIfNotExistSessionUser(session);
 		User user = (User) session.getAttribute("user");
@@ -53,9 +53,9 @@ public class OrderController {
 	
 	@RequestMapping(value="/order/{orderLineId}/delete", method=RequestMethod.GET)
 	public String deleteOrderLineFromOrder(@PathVariable long orderLineId, HttpSession session){
-		OrderLine orderLine = orderLineService.getOrderLineById(orderLineId);
+		OrderLine orderLine = orderLineService.findById(orderLineId);
 		User user = (User) session.getAttribute("user");
-		orderLineService.deleteOrderLine(user.getOrder(), orderLine);
+		orderLineService.delete(user.getOrder(), orderLine);
 		return "cart";
 	}
 	

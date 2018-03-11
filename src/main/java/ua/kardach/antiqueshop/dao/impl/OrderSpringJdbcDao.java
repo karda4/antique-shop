@@ -2,32 +2,39 @@ package ua.kardach.antiqueshop.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import ua.kardach.antiqueshop.dao.OrderDao;
+import ua.kardach.antiqueshop.dao.impl.row_mapper.OrderRowMapper;
 import ua.kardach.antiqueshop.model.Order;
 
 /**
  * @author Yura Kardach
  */
 @Repository
-public class OrderSpringJdbcDao extends AbstractSpringJdbcDao implements OrderDao{
+public class OrderSpringJdbcDao implements OrderDao{
 
-	private final static String SQL_SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE id=?";
-	private final static String SQL_SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders WHERE user_id=?";
-	private final static String SQL_INSERT_ORDER_WITH_RETURNED_KEY = "INSERT INTO orders(user_id) VALUES(?)";
+	public final static String SQL_SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE id=?";
+	public final static String SQL_SELECT_ORDER_ALL = "SELECT * FROM orders";
+	public final static String SQL_SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders WHERE user_id=?";
+	public final static String SQL_INSERT_ORDER_WITH_RETURNED_KEY = "INSERT INTO orders(user_id) VALUES(?)";
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private OrderRowMapper mapper;
 		
 	@Override
-	public boolean addOrder(Order order) {
+	public Order insert(Order order) {
 		final PreparedStatementCreator psc = new PreparedStatementCreator() {
 			
 			@Override
@@ -39,22 +46,27 @@ public class OrderSpringJdbcDao extends AbstractSpringJdbcDao implements OrderDa
 		};
 		
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
-		int rows = getJdbcTemplate().update(psc, keyHolder);
+		int rows = jdbcTemplate.update(psc, keyHolder);
 		if(rows == 1){
-			order.setId(keyHolder.getKey().longValue());
-			return true;
+			Long id = keyHolder.getKey().longValue();
+			return findById(id);
 		}
-		return false;
+		throw new RuntimeException("Cann't insert Order=" + order);
 	}
 
 	@Override
-	public Order getOrderById(long orderId) {
-		return getJdbcTemplate().queryForObject(SQL_SELECT_ORDER_BY_ID, new Object[]{orderId}, new OrderRowMapper());
+	public Order findById(Long id) {
+		return jdbcTemplate.queryForObject(SQL_SELECT_ORDER_BY_ID, mapper, id);
+	}
+	
+	@Override
+	public List<Order> findAll() {
+		return jdbcTemplate.query(SQL_SELECT_ORDER_ALL, mapper);
 	}
 	
 	@Override
 	public Order getOrderByUserId(long userId) {
-		List<Order> list = (List<Order>)getJdbcTemplate().query(SQL_SELECT_ORDER_BY_USER_ID, new Object[]{userId}, new OrderRowMapper());
+		List<Order> list = jdbcTemplate.query(SQL_SELECT_ORDER_BY_USER_ID, new Object[]{userId}, mapper);
 		if(list.isEmpty()){
 			return null;
 		}
@@ -65,24 +77,13 @@ public class OrderSpringJdbcDao extends AbstractSpringJdbcDao implements OrderDa
 	}
 
 	@Override
-	public boolean updateOrder(Order order) {
+	public void update(Order order) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean deleteOrder(Order order) {
+	public void delete(Order order) {
 		throw new UnsupportedOperationException();
 	}
 
-	private static class OrderRowMapper implements RowMapper<Order>{
-
-		@Override
-		public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Order order = new Order();
-			order.setId(rs.getLong("id"));
-			order.setUserId(rs.getLong("user_id"));
-			return order;
-		}
-		
-	}
 }

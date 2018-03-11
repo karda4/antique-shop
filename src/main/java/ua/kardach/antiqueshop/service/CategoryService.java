@@ -16,23 +16,23 @@ public class CategoryService {
 	@Autowired
 	private CategoryDao categoryDao;
 	
-	public Category addCategory(Category category){
-		return categoryDao.addCategory(category);
+	public Category insert(Category category){
+		return categoryDao.insert(category);
 	}
 
-	public Category getCategoryById(long id){
-		return categoryDao.getCategoryById(id);
+	public Category findById(long id){
+		return categoryDao.findById(id);
 	}
 	
 	public Category getCategory(Product product){
-		return categoryDao.getCategoryById(product.getCategoryId());
+		return categoryDao.findById(product.getCategory().getId());
 	}
 
-	public boolean updateCategory(Category category){
-		return categoryDao.updateCategory(category);
+	public void update(Category category){
+		categoryDao.update(category);
 	}
 
-	public boolean deleteCategory(Category category){
-		return categoryDao.deleteCategory(category);
+	public void delete(Category category){
+		categoryDao.delete(category);
 	}
 }

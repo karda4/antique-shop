@@ -22,16 +22,13 @@ public class UserService {
 	@Autowired
 	private RoleService roleService;
 	
-	public boolean saveUser(User user){
-		return userDao.addUser(user);
+	public User insert(User user){
+		return userDao.insert(user);
 	}
 	
 	public User addUser() {
 		User user = createUser();
-		if(saveUser(user)){
-			return user;
-		}
-		return null;
+		return insert(user);
 	}
 	
 	private User createUser(){
@@ -39,7 +36,7 @@ public class UserService {
 	}
 
 	public User getUserByName(String name){
-		User user = userDao.getUserByName(name);
+		User user = userDao.findByName(name);
 		Order order = orderService.getOrderByUserId(user.getId());
 		user.setOrder(order);
 		user.setRoles(roleService.getAllByUserId(user.getId()));
@@ -48,19 +45,16 @@ public class UserService {
 	
 	public boolean registrateUser(User user){
 		user.setRegistered(true);
-		if(updateUser(user)){
-			return true;
-		}
-		user.setRegistered(false);
-		return false;
+		update(user);
+		return true;
 	}
 
-	public boolean updateUser(User user){
-		return userDao.updateUser(user);
+	public void update(User user){
+		userDao.update(user);
 	}
 
-	public boolean deleteUser(User user){
-		return userDao.deleteUser(user);
+	public void delete(User user){
+		userDao.delete(user);
 	}
 	
 	public boolean isUserNickUnique(String nick){

@@ -5,17 +5,9 @@ import ua.kardach.antiqueshop.model.User;
 /**
  * @author Yura Kardach
  */
-public interface UserDao {
-
-	// create
-	public boolean addUser(User user);
+public interface UserDao extends AbstractDao<User, Long>{
 
 	// read
-	public User getUserByName(String name);
+	public User findByName(String name);
 
-	// update
-	public boolean updateUser(User user);
-
-	// delete
-	public boolean deleteUser(User user);
 }

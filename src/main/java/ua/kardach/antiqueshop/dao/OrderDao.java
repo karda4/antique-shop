@@ -5,20 +5,8 @@ import ua.kardach.antiqueshop.model.Order;
 /**
  * @author Yura Kardach
  */
-public interface OrderDao {
+public interface OrderDao extends AbstractDao<Order, Long> {
 
-	// create
-	public boolean addOrder(Order order);
-
-	// read
-	public Order getOrderById(long orderId);
 	public Order getOrderByUserId(long userId);
-
-	// update
-	public boolean updateOrder(Order order);
-
-	// delete
-	public boolean deleteOrder(Order order);
-
 	
 }

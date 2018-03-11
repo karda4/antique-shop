@@ -21,30 +21,30 @@ public class ProductService {
 	@Autowired
 	private CategoryService categoryService;
 	
-	public Product addProduct(Product product){
-		return productDao.addProduct(product);
+	public Product insert(Product product){
+		return productDao.insert(product);
 	}
 
-	public Product getProductById(long id){
-		Product product = productDao.getProductById(id);
+	public Product findById(Long id){
+		Product product = productDao.findById(id);
 		product.setImage(imageService.getImage(product));
 		product.setCategory(categoryService.getCategory(product));
 		return product;
 	}
 	
-	public List<Product> getAllProducts(){
-		List<Product> products = productDao.getAllProducts();
+	public List<Product> findAll(){
+		List<Product> products = productDao.findAll();
 		products.forEach(product -> product.setImage(imageService.getImage(product)));
 		products.forEach(product -> product.setCategory(categoryService.getCategory(product)));
 		return products;
 	}
 
-	public boolean updateProduct(Product product){
-		return productDao.updateProduct(product);
+	public void update(Product product){
+		productDao.update(product);
 	}
 
-	public boolean deleteProduct(Product product){
-		return productDao.deleteProduct(product);
+	public void delete(Product product){
+		productDao.delete(product);
 	}
 	
 	

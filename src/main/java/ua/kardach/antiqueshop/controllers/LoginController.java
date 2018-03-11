@@ -1,11 +1,7 @@
 package ua.kardach.antiqueshop.controllers;
 
-//import java.util.logging.Logger;
-
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.kardach.antiqueshop.model.Order;
 import ua.kardach.antiqueshop.model.User;
 import ua.kardach.antiqueshop.service.OrderService;
@@ -21,11 +18,10 @@ import ua.kardach.antiqueshop.service.UserService;
 /**
  * @author Yura Kardach
  */
+@Slf4j
 @Controller
 public class LoginController {
 	
-	private Logger logger = LogManager.getLogger(LoginController.class);
-
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -41,22 +37,22 @@ public class LoginController {
 		User loginUser = userService.getUserByName(name);
 		if (loginUser == null) {
 			model.addAttribute("loginError", "There isn't user with name '" + name + "'.");
-			logger.info("There isn't user with name '" + name + "'.");
+			log.info("There isn't user with name '" + name + "'.");
 			return "login";
 		} else if (!loginUser.getPassword().equals(password)) {
 			model.addAttribute("loginError", "Incorrect password.");
-			logger.info("Incorrect password=" + password + " for user=" + loginUser);
+			log.info("Incorrect password=" + password + " for user=" + loginUser);
 			return "login";
 		}
-		logger.info("Logged user=" + loginUser);
+		log.info("Logged user=" + loginUser);
 		User sessionUser = (User) session.getAttribute("user");
 		if (sessionUser != null) {
 			if (sessionUser.getOrder() != null) {
 				Order orderCopy = orderService.cloneOrder(sessionUser.getOrder());
-				orderService.deleteOrder(loginUser.getOrder());
-				orderService.deleteOrder(sessionUser.getOrder());
+				orderService.delete(loginUser.getOrder());
+				orderService.delete(sessionUser.getOrder());
 				loginUser.setOrder(orderCopy);
-				orderService.saveOrder(orderCopy);
+				orderService.insert(orderCopy);
 			}
 
 		}
@@ -66,7 +62,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
-		logger.info("user=" + session.getAttribute("user") + " is logout.");
+		log.info("user=" + session.getAttribute("user") + " is logout.");
 		session.removeAttribute("user");
 		return "redirect:/main";
 	}

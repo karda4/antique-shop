@@ -19,22 +19,21 @@ public class OrderService {
 	@Autowired
 	private OrderLineService orderLineService;
 	
-	public boolean saveOrder(Order order){
-		if(order == null) return false;
+	public Order insert(Order order){
+		if(order == null) {
+			return null;
+		}
 		if(order.getOrderLines() != null){
 			for(OrderLine orderLine : order.getOrderLines()){
-				orderLineService.saveOrderLine(orderLine);
+				orderLineService.insert(orderLine);
 			}
 		}
-		return orderDao.addOrder(order);
+		return orderDao.insert(order);
 	}
 	
 	public Order addOrder(User user){
 		Order order = createOrder(user);
-		if(saveOrder(order)){
-			return order;
-		}
-		return null;
+		return insert(order);
 	}
 	
 	private Order createOrder(User user){
@@ -44,7 +43,7 @@ public class OrderService {
 	}
 
 	public Order getOrderById(long orderId){
-		Order order = orderDao.getOrderById(orderId);
+		Order order = orderDao.findById(orderId);
 		order.setOrderLines(orderLineService.getOrderLines(order));
 		return order;
 	}
@@ -57,19 +56,18 @@ public class OrderService {
 		return order;
 	}
 
-	public boolean updateOrder(Order order){
-		return orderDao.updateOrder(order);
+	public void update(Order order){
+		orderDao.update(order);
 	}
 
-	public boolean deleteOrder(Order order){
+	public void delete(Order order){
 		if(order == null){
-			return false;
+			return;
 		}
-		//order.getOrderLines().forEach(line -> orderLineService.deleteOrderLine(order, line));
 		for(OrderLine orderLine : order.getOrderLines()){
-			orderLineService.deleteOrderLine(order, orderLine);
+			orderLineService.delete(order, orderLine);
 		}
-		return orderDao.deleteOrder(order);
+		orderDao.delete(order);
 	}
 
 	public Order cloneOrder(Order order){
