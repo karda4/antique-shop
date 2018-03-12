@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo -u postgres psql < ./create_tables.sql
+psql "host=localhost dbname=antique_shop user=antique password=euqitna" < ./populate_tables.sql

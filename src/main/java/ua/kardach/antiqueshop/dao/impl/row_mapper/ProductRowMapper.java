@@ -4,29 +4,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import ua.kardach.antiqueshop.dao.impl.CategorySpringJdbcDao;
-import ua.kardach.antiqueshop.dao.impl.ImageSpringJdbcDao;
 import ua.kardach.antiqueshop.model.Category;
 import ua.kardach.antiqueshop.model.Image;
 import ua.kardach.antiqueshop.model.Product;
+import ua.kardach.antiqueshop.service.CategoryService;
+import ua.kardach.antiqueshop.service.ImageService;
 
 @Component
 public class ProductRowMapper implements RowMapper<Product>{
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private ImageService imageService;
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Override
 	public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Long imageId = rs.getLong("image_id");
-		Image image = jdbcTemplate.queryForObject(ImageSpringJdbcDao.SQL_SELECT_IMAGE_BY_ID, new Object[] { imageId }, new ImageRowMapper());
+		Image image = imageService.findById(imageId);
 		
 		Long categoryId = rs.getLong("category_id");
-		Category category = jdbcTemplate.queryForObject(CategorySpringJdbcDao.SQL_SELECT_CATEGORY_BY_ID, new Object[] { categoryId }, new CategoryRowMapper());
+		Category category = categoryService.findById(categoryId);
 		
 		Product product = new Product();
 		product.setId(rs.getLong("id"));

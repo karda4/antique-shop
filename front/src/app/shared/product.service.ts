@@ -1,15 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Product, Image } from './types';
 
 @Injectable()
 export class ProductService {
 
+  constructor(private httpClient: HttpClient) { }
+    
   getProducts(): Product[] {
+    const products: Product[] = [];
+
+    this.httpClient.get<Product[]>("/api/products")
+      .subscribe(
+        data => products.push(...data),
+        err => console.log(err)
+      );
+
     return products;
+    //return products;
   }
 
   getProductById(productId: number): Product {
-    return products.find(p => p.id === productId);
+      let product: Product = <Product> {};
+
+    this.httpClient.get<Product>(`/api/products/${productId}`)
+      .subscribe(
+        data => Object.assign(product, data),
+        err => console.log(err)
+      );
+
+    return product;
+    //return products.find(p => p.id === productId);
   }
 }
 

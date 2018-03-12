@@ -16,27 +16,17 @@ public class ProductService {
 
 	@Autowired
 	private ProductDao productDao;
-	@Autowired
-	private ImageService imageService;
-	@Autowired
-	private CategoryService categoryService;
 	
 	public Product insert(Product product){
 		return productDao.insert(product);
 	}
 
 	public Product findById(Long id){
-		Product product = productDao.findById(id);
-		product.setImage(imageService.getImage(product));
-		product.setCategory(categoryService.getCategory(product));
-		return product;
+		return productDao.findById(id);
 	}
 	
 	public List<Product> findAll(){
-		List<Product> products = productDao.findAll();
-		products.forEach(product -> product.setImage(imageService.getImage(product)));
-		products.forEach(product -> product.setCategory(categoryService.getCategory(product)));
-		return products;
+		return productDao.findAll();
 	}
 
 	public void update(Product product){

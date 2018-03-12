@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -29,7 +30,8 @@ import { ProductService } from './shared/product.service';
       {path: 'products/:productId', component: ProductDetailComponent}
     ]),
     FormsModule,
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [ProductService],
   bootstrap: [AppComponent]
