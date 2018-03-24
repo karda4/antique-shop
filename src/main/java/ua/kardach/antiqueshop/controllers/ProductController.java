@@ -13,13 +13,13 @@ import ua.kardach.antiqueshop.model.Product;
 import ua.kardach.antiqueshop.service.ProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 	
 	@Autowired
 	private ProductService productService;
 
-	@RequestMapping(value="/", method=RequestMethod.GET)
+	@RequestMapping(value="", method=RequestMethod.GET)
 	public ResponseEntity<List<Product>> getProducts() {
 		List<Product> result = productService.findAll();
 		return ResponseEntity.ok(result);

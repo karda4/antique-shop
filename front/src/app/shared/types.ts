@@ -1,3 +1,5 @@
+export const API = '/api';
+
 export interface Product {
     id: number;
     name: string;
