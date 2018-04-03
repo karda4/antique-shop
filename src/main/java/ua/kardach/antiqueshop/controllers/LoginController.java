@@ -34,7 +34,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String verifyLogin(@RequestParam String name, @RequestParam String password, HttpSession session, Model model) {
-		User loginUser = userService.getUserByName(name);
+		User loginUser = userService.findByName(name);
 		if (loginUser == null) {
 			model.addAttribute("loginError", "There isn't user with name '" + name + "'.");
 			log.info("There isn't user with name '" + name + "'.");

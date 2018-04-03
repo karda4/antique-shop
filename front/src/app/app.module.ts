@@ -12,6 +12,8 @@ import { ProductItemComponent } from './product-item/product-item.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { SearchComponent } from './search/search.component';
 import { ProductService } from './shared/product.service';
+import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -22,12 +24,16 @@ import { ProductService } from './shared/product.service';
     NavbarComponent,
     ProductItemComponent,
     ProductDetailComponent,
-    SearchComponent
+    SearchComponent,
+    AdminComponent,
+    LoginComponent
   ],
   imports: [
   	RouterModule.forRoot([
       {path: '',                    component: HomeComponent},
-      {path: 'products/:productId', component: ProductDetailComponent}
+      {path: 'products/:productId', component: ProductDetailComponent},
+      {path: 'admin',				component: AdminComponent},
+      {path: 'login',				component: LoginComponent}
     ]),
     FormsModule,
     BrowserModule,

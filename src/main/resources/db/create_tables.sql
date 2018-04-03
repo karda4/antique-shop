@@ -36,7 +36,7 @@ CREATE TABLE product (
 	id BIGSERIAL PRIMARY KEY,
 	name VARCHAR (50) NOT NULL,
 	price INTEGER,
-	description VARCHAR (250) NOT NULL,
+	description VARCHAR (2000) NOT NULL,
 	category_id BIGINT REFERENCES category(id),
 	image_id BIGINT REFERENCES image(id)
 );

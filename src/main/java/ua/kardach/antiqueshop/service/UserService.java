@@ -26,16 +26,11 @@ public class UserService {
 		return userDao.insert(user);
 	}
 	
-	public User addUser() {
-		User user = createUser();
-		return insert(user);
+	public User findById(Long id) {
+		return userDao.findById(id);
 	}
 	
-	private User createUser(){
-		return new User();
-	}
-
-	public User getUserByName(String name){
+	public User findByName(String name){
 		User user = userDao.findByName(name);
 		Order order = orderService.getOrderByUserId(user.getId());
 		user.setOrder(order);
@@ -58,7 +53,7 @@ public class UserService {
 	}
 	
 	public boolean isUserNickUnique(String nick){
-		User user = this.getUserByName(nick);
+		User user = this.findByName(nick);
 		return user == null;
 	}
 	
@@ -66,14 +61,4 @@ public class UserService {
 		return user.isRegistered();
 	}
 	
-	public void createIfNotExistSessionUser(HttpSession session){
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			user = addUser();
-			session.setAttribute("user", user);
-		}
-		if(user.getOrder() == null){
-			orderService.addOrder(user);
-		}
-	}
 }

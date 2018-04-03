@@ -26,14 +26,11 @@ public class OrderController {
 	private OrderLineService orderLineService;
 	@Autowired
 	private ProductService productService;
-	@Autowired
-	private UserService userService;
 
 	@RequestMapping(value="/order/{productId}/{amount}", method=RequestMethod.POST)
 	public String addOrderLineToOrder(@PathVariable long productId, @PathVariable int amount, HttpSession session){
 		Product product = productService.findById(productId);
 		
-		userService.createIfNotExistSessionUser(session);
 		User user = (User) session.getAttribute("user");
 		OrderLine orderLine = orderLineService.addOrderLine(product, amount);
 		user.getOrder().addOrderLine(orderLine);

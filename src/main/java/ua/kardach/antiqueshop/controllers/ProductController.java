@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.kardach.antiqueshop.model.Product;
 import ua.kardach.antiqueshop.service.ProductService;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
